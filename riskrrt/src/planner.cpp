@@ -2,7 +2,7 @@
 #include <vector>
 #include <ros/ros.h>
 #include <riskrrt/Trajectory.h>
-#include "riskrrt/riskrrt.hpp"
+#include <riskrrt/riskrrt.hpp>
 
 using namespace std;
 

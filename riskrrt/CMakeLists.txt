@@ -17,6 +17,9 @@ find_package(catkin REQUIRED COMPONENTS
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
+set(HEADER_FILES
+    include/riskrrt/riskrrt.hpp
+)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -102,17 +105,18 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 # include_directories(include)
-include_directories(include ${catkin_INCLUDE_DIRS})
+include_directories(include)
+include_directories(${catkin_INCLUDE_DIRS})
 
 ## Declare a cpp library
-#add_library(riskrrt src/riskrrt.cpp)
+add_library(riskrrt src/riskrrt.cpp ${HEADER_FILES})
 
 ## Declare a cpp executable
 add_executable(og_builder src/og_builder.cpp)
 add_executable(og_builder_stage src/og_builder_stage.cpp)
 add_executable(og_builder_stage_rot src/og_builder_stage_rot.cpp)
-add_executable(riskrrt_planner src/planner.cpp src/riskrrt.cpp)
-add_executable(controller src/controller.cpp src/riskrrt.cpp)
+add_executable(riskrrt_planner src/planner.cpp)
+add_executable(controller src/controller.cpp)
 add_executable(goal_pub src/goal_pub.cpp)
 
 ## Add cmake target dependencies of the executable/library
@@ -121,16 +125,19 @@ add_executable(goal_pub src/goal_pub.cpp)
 add_dependencies(og_builder ${riskrrt}_gencfg riskrrt_generate_messages_cpp)
 add_dependencies(og_builder_stage ${riskrrt}_gencfg riskrrt_generate_messages_cpp)
 add_dependencies(og_builder_stage_rot ${riskrrt}_gencfg riskrrt_generate_messages_cpp)
-add_dependencies(riskrrt_planner ${riskrrt}_gencfg riskrrt_generate_messages_cpp)
-add_dependencies(controller ${riskrrt}_gencfg riskrrt_generate_messages_cpp)
+add_dependencies(riskrrt ${riskrrt}_gencfg riskrrt_generate_messages_cpp)
+add_dependencies(riskrrt_planner riskrrt)
+add_dependencies(controller riskrrt)
 add_dependencies(goal_pub ${riskrrt}_gencfg riskrrt_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(og_builder ${catkin_LIBRARIES})
 target_link_libraries(og_builder_stage ${catkin_LIBRARIES})
 target_link_libraries(og_builder_stage_rot ${catkin_LIBRARIES})
+target_link_libraries(riskrrt_planner riskrrt)
 target_link_libraries(riskrrt_planner ${catkin_LIBRARIES})
 target_link_libraries(controller ${catkin_LIBRARIES})
+target_link_libraries(controller riskrrt)
 target_link_libraries(goal_pub ${catkin_LIBRARIES})
 
 #############
